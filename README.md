@@ -185,11 +185,11 @@ If your project is a game, list the rules clearly.
 ## 5.1 Definition of “Playable”
 Your project will be considered complete only if these conditions are met.
 
-- [ ] Ultrasonic sensor correctly detects movement and position across the scanning range
-- [ ] Servo motor smoothly scans left to right without failure
-- [ ]  LED strips light up accurately based on detected position
-- [ ] System runs continuously without random flickering or power issues
-- [ ] Interaction is immediate and responsive without noticeable delay
+- [✅ ] Ultrasonic sensor correctly detects movement and position across the scanning range
+- [✅ ] Servo motor smoothly scans left to right without failure
+- [✅ ] LED strips light up accurately based on detected position
+- [✅ ] System runs continuously without random flickering or power issues
+- [✅ ] Interaction is immediate and responsive without noticeable delay
 
 ## 5.2 Minimum Viable Version
 What is the smallest version of this project that still delivers the core experience?
@@ -235,15 +235,23 @@ Include:
 - app interaction if any.
 
 **Response:**  
-`[Write here]`
+The system takes input through an ultrasonic sensor that detects the distance and position of a person or object. This sensor is mounted on a servo motor, which continuously scans left to right to cover the full width of the wall.
+
+The ESP32 processes this data by mapping the detected position to specific sections of the NeoPixel LED strips. Based on this, it decides which LEDs should light up and how they should behave.
+
+The output is a visual response where the LED strips light up in real time, following the user’s movement and creating dynamic patterns.
+
+Physically, the system consists of horizonatally arranged NeoPixel strips forming a wall, with the sensor and servo mounted at the top. Power is managed using a 12V adapter and a buck converter to safely supply the required voltage to the components.
+
+There is no app interaction; the system works as a standalone installation.
 
 ## 6.3 Input / Output Map
 
 | System Part | Type | What It Does |
 |---|---|---|
-| `[Button / Sensor / Switch / App Input]` | Input | `[Describe]` |
-| `[ESP32 / Controller]` | Processing | `[Describe]` |
-| `[LED / Motor / Servo / Buzzer / Display]` | Output | `[Describe]` |
+|Ultrasonic Sensor | Input | Detects distance and position of objects as it scans across the wall |
+| ESP32 | Processing |Reads sensor and button inputs, maps position, and controls LED output and servo movement |
+|NeoPixel LED Strips | Output | Lights up corresponding sections and displays animations based on input |
 | `[Mechanical Assembly]` | Physical Action | `[Describe]` |
 
 ---
