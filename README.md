@@ -382,10 +382,10 @@ Insert a hand-drawn or software-made circuit diagram.
 
 | Question | Response |
 |---|---|
-| Power source | `[USB / battery / adapter / other]` |
-| Voltage required | `[Write here]` |
-| Current concerns | `[Write here]` |
-| Safety concerns | `[Write here]` |
+| Power source | 12V AC-DC adapter|
+| Voltage required | 5V (stepped down using LM2596 buck regulator)|
+| Current concerns |High current draw from multiple NeoPixel strips, required proper distribution and limiting number of strips to avoid instability |
+| Safety concerns | Risk of overheating, voltage mismatch, or damaging ESP32 if voltage is not stepped down properly, ensured common ground and correct voltage regulation |
 
 ---
 
@@ -396,7 +396,7 @@ Insert a hand-drawn or software-made circuit diagram.
 | Tool / Platform | Purpose |
 |---|---|
 | `[MicroPython / Arduino / MIT App Inventor / CAD tool / other]` | `[Purpose]` |
-| `[Tool]` | `[Purpose]` |
+| MicroPython Thonny IDE	 | Programming the ESP32 to control sensor input, servo movement, and LED output Writing, uploading, and debugging MicroPython code on the ESP32 |
 
 ## 10.2 Software Logic
 Describe what the code must do.
@@ -411,7 +411,27 @@ Include:
 - reset behavior.
 
 **Response:**  
-`[Write here]`
+Startup behavior:
+On startup, the ESP32 initializes the servo, ultrasonic sensor, NeoPixel strips, and buttons. The servo begins scanning left to right.
+
+Input handling:
+The system takes input from the ultrasonic sensor for movement and from buttons for triggering animations.
+
+Sensor reading:
+The ultrasonic sensor continuously measures distance as it scans across the wall.
+
+Decision logic:
+The code maps the detected position to specific LED sections. If a button is pressed, it overrides the sensor mode and switches to animation mode.
+
+Output behavior:
+In default mode, LEDs light up based on position. In button mode, predefined pixel art or patterns are displayed for exactly 10 seconds.
+
+Communication logic:
+All components are directly controlled by the ESP32 using GPIO pins. No external communication or app is used.
+
+Reset behavior:
+After 10 seconds or a button press, the system returns to the default sensor-based interaction mode automatically.
+
 
 ## 10.3 Code Flowchart
 Insert a flowchart showing your code logic.
@@ -441,7 +461,7 @@ Suggested sequence:
 
 ## 11.1 Is an app part of this project?
 - [ ] Yes
-- [ ] No
+- [✅] No
 
 If yes, complete this section.
 
@@ -488,9 +508,18 @@ Insert a sketch or screenshot of the app interface.
 
 | Item | Quantity | In Kit? | Need to Buy? | Estimated Cost | Material / Spec | Why This Choice? |
 |---|---:|---|---|---:|---|---|
-| `[ESP32]` | `1` | `Yes` | `No` | `0` | `[Spec]` | `[Reason]` |
-| `[Item]` | `[Qty]` | `[Yes/No]` | `[Yes/No]` | `[Cost]` | `[Spec]` | `[Reason]` |
-| `[Item]` | `[Qty]` | `[Yes/No]` | `[Yes/No]` | `[Cost]` | `[Spec]` | `[Reason]` |
+| ESP32 | 2 | Yes (1) | Yes (1) | 400 | WiFi + Bluetooth microcontroller | One for use, one as backup in case of damage |
+| NeoPixel LED Strip | 15 meters | No | Yes | 1650 | WS2812B addressable LEDs | Main visual output, individually controllable LEDs` |
+| LM2596 Buck Regulator | 2 | No | Yes | 100 | DC-DC step down converter | To convert 12V to stable 5V, one extra for backup |
+| Servo Motor |3 | Yes (1) | Yes (2) | 100 | `Standard 180° servo | One for use, extras in case of failure |
+| Ultrasonic Sensor | 2 | yes | bo | 0 | HC-SR04` |For distance and position detection |
+| Push Buttons | 2–3 | Yes | No | 0 |Standard tactile switches | To trigger animation modes |
+| Jumper Wires | 100 | yes | yes | 400 | Male-to-male / male-to-female | For prototyping and connections |
+| Red & Black Wires | 2 meters | yes | yes | 200 | Copper wires` | For stable power distribution |
+| 12V Power Adapter | 1 | Yes | No | NA | AC-DC adapter | Main power supply |
+| Resistors | 2 | Yes` | No | 0 | For voltage divider | To step down echo pin voltage safely |
+| Foam Board | 1meter in lengh and 10mm x 15 | No | YES | 0 | Lightweight board | Structure support for LED wall |
+| Black Paper | ebiugh to cover the board | No | YES | 250-300 | Matte sheet |Improves visual depth and contrast |
 
 ## 12.2 Material Justification
 Explain why you selected your main materials and components.
@@ -502,31 +531,40 @@ Examples:
 - Why bearing instead of a plain shaft hole?
 
 **Response:**  
-`[Write here]`
+NeoPixel LED strips were chosen because they are individually addressable, making it easy to control specific sections and create dynamic patterns. An ESP32 was used as it has enough GPIO pins and processing capability to handle multiple components together.
+
+A servo motor was selected instead of a DC motor because it allows controlled angular movement, which is needed for accurate left-to-right scanning of the sensor. The ultrasonic sensor was used as a simple and cost-effective way to detect distance without needing complex camera systems.
+
+The LM2596 buck regulator was necessary to safely step down 12V to 5V, since the LED strips require stable voltage and higher current. A voltage divider was used to protect the ESP32 from higher voltage signals coming from the sensor.
+
+Foam board was chosen for the structure because it is lightweight, easy to cut, and stable enough to hold the LED strips. Black paper was added to improve the visual effect by increasing contrast and making the lights stand out more.
 
 ## 12.3 Items to Purchase Separately
 
 | Item | Why Needed | Purchase Link | Latest Safe Date to Procure | Status |
 |---|---|---|---|---|
-| `[Item]` | `[Reason]` | `[Link]` | `[Date]` | `[Pending / Ordered / Received]` |
-| `[Item]` | `[Reason]` | `[Link]` | `[Date]` | `[Pending / Ordered / Received]` |
+| ESP32 | Main controller and backup unit | NA | 15TH APR |Received |
+| LM2596 Buck Regulator | Step down voltage from 12V to 5V | Not applicable | Received |
+| Wires (Jumper + Red/Black) | Connections and power distribution | NA | Already procured |
+| NeoPixel LED Strips | Main visual output for the wall | NA |Already procured | 
+| Servo Motors | To rotate ultrasonic sensor | NA |Already procured | 
 
 ## 12.4 Budget Summary
 
 | Budget Item | Estimated Cost |
 |---|---:|
-| Electronics | `[Cost]` |
-| Mechanical parts | `[Cost]` |
-| Fabrication materials | `[Cost]` |
-| Purchased extras | `[Cost]` |
-| Contingency | `[Cost]` |
-| **Total** | `[Cost]` |
+| Electronics (ESP32, NeoPixel strips, LM2596 buck regulator, ultrasonic sensor)| 2325 |
+| Mechanical parts (servo motors) | 150 |
+| Fabrication materials (foam board, black paper) | 200 |
+| Purchased extras (wires, jumper wires, resistors) | 200 |
+| Contingency (extra components / replacements)| 200 |
+| **Total** | 3075 |
 
 ## 12.5 Budget Reflection
 If your cost is too high, what can be simplified, removed, substituted, or shared?
 
 **Response:**  
-`[Write here]`
+Costs can be reduced by borrowing components like the ultrasonic sensor, buttons, servo motors, and wires instead of purchasing them. The number of NeoPixel strips can also be reduced to make a smaller version of the installation while still maintaining the core interaction.
 
 ---
 
@@ -543,32 +581,42 @@ Include:
 - how documentation will be maintained.
 
 **Response:**  
-`[Write here]`
+Tasks are divided based on strengths. Visruta handles coding and circuit design, while Navyaa supports with debugging, coding help, and managing logistics like components and setup.
+
+Decisions are usually mutual. If there is a disagreement, both approaches are tested and the one that works better, looks better, or fits the system more efficiently is chosen.
+
+Progress is tracked using a basic timetable based on daily goals. Tasks are planned according to what needs to be completed by a certain time and this is generally followed.
+
+If a task is delayed, it is usually completed the same day even if it requires working late. If progress stops due to confusion or technical issues, external help is taken before continuing.
+
+Documentation is maintained alongside the build. While Visruta works on final coding and adjustments, Navyaa updates the repository and later handles documentation visuals like photos and videos.
 
 ## 13.2 Task Breakdown
 
 | Task ID | Task | Owner | Estimated Hours | Deadline | Dependency | Status |
 |---|---|---|---:|---|---|---|
-| T1 | `[Finalize concept]` | `[Name]` | `2` | `[Date]` | `None` | `To Do` |
-| T2 | `[Complete BOM]` | `[Name]` | `1` | `[Date]` | `T1` | `To Do` |
-| T3 | `[Test electronics]` | `[Name]` | `2` | `[Date]` | `T1` | `To Do` |
-| T4 | `[Build structure]` | `[Name]` | `4` | `[Date]` | `T1` | `To Do` |
-| T5 | `[Write control code]` | `[Name]` | `4` | `[Date]` | `T3` | `To Do` |
-| T6 | `[Integrate system]` | `[Name]` | `4` | `[Date]` | `T4, T5` | `To Do` |
-| T7 | `[Playtest]` | `[Name]` | `2` | `[Date]` | `T6` | `To Do` |
-| T8 | `[Refine and document]` | `[Name]` | `3` | `[Date]` | `T7` | `To Do` |
+| T1 | Finalize concept | Navyaa & Visruta | 2–3 | 7 April |None |Completed |
+| T2 | Complete BOM | Navyaa & Visruta  | 5-6 | 15 April | T1 |Completed |
+| T3 | Test electronics | Navyaa & Visruta | 2-3 | 13–14 April | `T1| Completed|
+| T4 | Build structure | Navyaa | 1 | 14 April | T1 |Completed |
+| T5 | Write control code | Visruta | 4 |14 April| T3 | Completed |
+| T6 | Integrate system | `Navyaa & Visruta | 5-6 | 16–17 April | T4, T5 | Completed|
+| T7 | Playtest` | Navyaa & Visruta | 2 | 19–20 April | T6 | Completed |
+| T8 |Refine and document | Navyaa & Visruta | 3 | 20 April | T7 |Completed |
+
+
 
 ## 13.3 Responsibility Split
 
 | Area | Main Owner | Support Owner |
 |---|---|---|
-| Concept and gameplay | `[Name]` | `[Name]` |
-| Electronics | `[Name]` | `[Name]` |
-| Coding | `[Name]` | `[Name]` |
-| App | `[Name]` | `[Name]` |
-| Mechanical build | `[Name]` | `[Name]` |
-| Testing | `[Name]` | `[Name]` |
-| Documentation | `[Name]` | `[Name]` |
+| Concept and gameplay | Navyaa |Visruta |
+| Electronics | Visruta | Navyaa |
+| Coding | Visruta | Navyaa |
+| App NA
+| Mechanical build NA
+| Testing | Visruta |Navyaa |
+| Documentation | Navyaa | Visruta |
 
 ---
 
@@ -578,46 +626,46 @@ Include:
 
 ### Week 1 — Plan and De-risk
 Expected outcomes:
-- [ ] Idea finalized
-- [ ] Core interaction decided
-- [ ] Sketches made
-- [ ] BOM completed
-- [ ] Purchase needs identified
-- [ ] Key uncertainty identified
-- [ ] Basic feasibility tested
+- [✅ ] Idea finalized
+- [ ✅] Core interaction decided
+- [✅ ] Sketches made
+- [✅ ] BOM completed
+- [✅ ] Purchase needs identified
+- ✅[ ] Key uncertainty identified
+- [ ✅] Basic feasibility tested
 
 ### Week 2 — Build Subsystems
 Expected outcomes:
-- [ ] Electronics tests completed
+- [✅ ] Electronics tests completed
 - [ ] CAD / structure planning completed
 - [ ] App UI started if needed
 - [ ] Mechanical concept tested
-- [ ] Main subsystems partially working
+- [ ✅] Main subsystems partially working
 
 ### Week 3 — Integrate
 Expected outcomes:
-- [ ] Physical body built
-- [ ] Electronics integrated
-- [ ] Code connected to hardware
+- [ ✅] Physical body built
+- [ ✅] Electronics integrated
+- [✅ ] Code connected to hardware
 - [ ] App connected if required
-- [ ] First playable version exists
+- [✅ ] First playable version exists
 
 ### Week 4 — Refine and Finish
 Expected outcomes:
-- [ ] Technical bugs reduced
-- [ ] Playtesting completed
-- [ ] Improvements made
-- [ ] Documentation completed
-- [ ] Final build ready
+- ✅[ ] Technical bugs reduced
+- [ ✅] Playtesting completed
+- [ ✅] Improvements made
+- [✅ ] Documentation completed
+- [ ✅] Final build ready
 
 ## 14.2 Weekly Update Log
 
 | Week | Planned Goal | What Actually Happened | What Changed | Next Steps |
 |---|---|---|---|---|
-| Week 1 | `[Write here]` | `[Write here]` | `[Write here]` | `[Write here]` |
-| Week 2 | `[Write here]` | `[Write here]` | `[Write here]` | `[Write here]` |
-| Week 3 | `[Write here]` | `[Write here]` | `[Write here]` | `[Write here]` |
-| Week 4 | `[Write here]` | `[Write here]` | `[Write here]` | `[Write here]` |
+| Week 1 |Finalize concept and basic idea |Concept was finalized quickly and direction was clear | `Decided to go with interactive LED wall instead of a game |Start gathering components and plan electronics |
+| Week 2 | Complete BOM and test basic electronics | BOM completed, servo and ultrasonic sensor tested after multiple issues | Faced problems with power and sensor understanding, added voltage divider | Build small prototype with LED strips |
+| Week 3 |Build structure and develop code` | Structure built and initial code written, small prototype worked |Faced mapping issues with LED strips and coding errors, fixed through iteration| Scale up to full installation |
+| Week 4 | Integrate full system and test | Full system built, major issues with power and LED behavior, reduced to 10 strips |Changed approach to fewer strips for stability | Final testing, refinement, and documentation |
 
 ---
 
@@ -627,16 +675,17 @@ Expected outcomes:
 
 | Risk | Type | Likelihood | Impact | Mitigation Plan | Owner |
 |---|---|---|---|---|---|
-| `[Example: Bluetooth disconnects]` | `Technical` | `Medium` | `High` | `[Fallback interaction / simplify connection flow]` | `[Name]` |
-| `[Example: Structure breaks during play]` | `Mechanical` | `Medium` | `High` | `[Reinforce joints / change material]` | `[Name]` |
-| `[Risk]` | `[Technical / Material / Time / Gameplay]` | `[Low/Medium/High]` | `[Low/Medium/High]` | `[Plan]` | `[Name]` |
-| `[Risk]` | `[Type]` | `[Low/Medium/High]` | `[Low/Medium/High]` | `[Plan]` | `[Name]` |
+| Servo malfunction or jitter | Technical | High | High | Use stable power supply, keep backup servo, test before integration` | Navyaa |
+| LED strips flickering or not working properly | Technical | High | High | Proper power distribution using buck regulator, limit number of strips, test in smaller batches | Visruta |
+| ESP32 getting damaged due to voltage issues | Technical` | `Medium | High | Use voltage divider, correct wiring, keep backup ESP32 | Navyaa |
+| Loose wiring or connection failures | Material | High | Medium | Secure connections, use proper wires instead of only jumper wires | Visruta |
+
 
 ## 15.2 Biggest Unknown Right Now
 What is the single biggest uncertainty in your project at this stage?
 
 **Response:**  
-`[Write here]`
+The biggest uncertainty is power stability. There is a risk that components may get damaged or the system may not run consistently because the power supply may not be sufficient for all the LED strips and components together.
 
 ---
 
@@ -646,10 +695,10 @@ What is the single biggest uncertainty in your project at this stage?
 
 | What Needs Testing | How You Will Test It | Success Condition |
 |---|---|---|
-| `[Bluetooth connection]` | `[Method]` | `[What counts as success?]` |
-| `[Mechanism movement]` | `[Method]` | `[What counts as success?]` |
-| `[Sensor behavior]` | `[Method]` | `[What counts as success?]` |
-| `[App communication]` | `[Method]` | `[What counts as success?]` |
+|Servo movement |Run servo sweep repeatedly and observe motion` | Smooth left to right movement without jitter or stopping |
+| Sensor behavior | Place objects at different positions and distances | Correct detection and mapping to LED sections |
+|LED strip behavior | Test strips in small groups and then combined setup | LEDs light correctly without flickering or random colors` |
+| Power stability | Run full system for extended time | No overheating, no component failure, stable lighting output |
 
 ## 16.2 Playtesting Plan
 
