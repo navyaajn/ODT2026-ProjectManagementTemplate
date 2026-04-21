@@ -52,7 +52,8 @@ By the final review, this README should clearly show:
 # 1. Team Identity
 
 ## 1.1 Studio / Group Name
-`[Enter your group name]`
+Perfect Match 
+
 
 ## 1.2 Team Members
 
@@ -62,7 +63,7 @@ By the final review, this README should clearly show:
 | Visruta Varma | Electronics / Coding / Circuit Design / Fabrication / Mechanics | Aesthetics | Circuit design, ESP32 programming, visual design decisions, translating concept into interactive output, crashout randomly |
 
 ## 1.3 Project Title
-`[Enter the title of your project]`
+600 Pixels
 
 ## 1.4 One-Line Pitch
 A dynamic LED wall that detects movement and lights up in real time, turning simple gestures into an engaging visual experience.
@@ -370,7 +371,15 @@ NA
 Describe the main electrical connections.
 
 **Response:**  
-`[Write here]`
+**Response:**
+The ESP32 acts as the central controller, with all components connected to it and sharing a common ground. A 12V adapter supplies power, which is stepped down to 5V using an LM2596 buck regulator. This 5V line powers the servo motor, ultrasonic sensor, and all NeoPixel LED strips.
+
+The servo motor is connected to GPIO 13 for signal control, allowing it to rotate and scan left to right. The ultrasonic sensor has its trigger pin connected to GPIO 5 and its echo pin connected to GPIO 18 through a voltage divider to reduce the signal to a safe level for the ESP32.
+
+Five NeoPixel LED strips are connected to different GPIO pins: GPIO 23 for the top strip, GPIO 22 for the second strip, GPIO 21 for the middle strip, GPIO 19 for the fourth strip, and GPIO 25 for the bottom strip. All strips receive 5V power from the buck regulator and share a common ground.
+
+Five push buttons are connected to GPIO pins 32, 33, 26, 27, and 14. Each button is connected between the GPIO pin and ground, using the ESP32’s internal pull-up resistors. These buttons are used to trigger different animation modes such as wave, heart, rings, text, and to return to the default radar mode.
+
 
 ## 9.3 Circuit Diagram
 Insert a hand-drawn or software-made circuit diagram.
@@ -447,12 +456,121 @@ Suggested sequence:
 - error handling.
 
 **Insert image below:**  
-`[Upload image and link here]`
+<img width="1440" height="2840" alt="image" src="https://github.com/user-attachments/assets/f7e7f6bb-928d-4310-a25d-8514463e6a2b" />
+
 
 ## 10.4 Pseudocode
 
-```text
-[Write your pseudocode here]
+```START
+
+INITIALIZE:
+    set animation durations (10s, 15s for text)
+    configure buttons as input with pull-up
+    configure servo on GPIO 13
+    configure ultrasonic sensor (TRIG = GPIO 5, ECHO = GPIO 18)
+    configure 5 NeoPixel strips on GPIO 23, 22, 21, 19, 25
+    set initial mode = radar
+    set servo angle range and direction
+    set frame counters and timers
+
+LOOP FOREVER:
+
+    READ button states
+
+    IF wave button pressed:
+        set mode = wave
+        set mode end time = current time + 10s
+
+    IF heart button pressed:
+        set mode = heart
+        set mode end time = current time + 10s
+
+    IF rings button pressed:
+        set mode = rings
+        set mode end time = current time + 10s
+
+    IF text button pressed:
+        set mode = text
+        set mode end time = current time + 15s
+
+    IF stop button pressed:
+        set mode = radar
+
+    UPDATE previous button states
+
+    IF mode is not radar AND current time > mode end:
+        set mode = radar
+
+    --------------------------------------------------
+
+    IF mode == radar:
+        move servo to current angle
+        measure distance using ultrasonic sensor
+
+        DETERMINE active LED strips based on distance:
+            far → middle strip
+            medium → 3 middle strips
+            near → all strips
+
+        UPDATE LED intensity smoothly
+
+        CALCULATE LED position based on servo angle
+
+        DRAW radar effect:
+            front trail (bright)
+            back trail (dim)
+            color gradient along strip
+
+        WRITE LED data
+
+        UPDATE servo angle:
+            move forward until max angle
+            reverse direction at limits
+
+        WAIT small delay
+
+    --------------------------------------------------
+
+    ELSE IF mode == wave:
+        FOR each LED in each strip:
+            calculate sine wave brightness
+            assign blue color intensity
+        display LEDs
+        increment frame
+        WAIT small delay
+
+    --------------------------------------------------
+
+    ELSE IF mode == heart:
+        calculate color shift over time
+        map heart pattern onto LED grid
+        apply center brightness fade
+        display LEDs
+        increment time variable
+        WAIT small delay
+
+    --------------------------------------------------
+
+    ELSE IF mode == rings:
+        fade previous LED values
+        calculate distance from center for each LED
+        generate circular wave pattern
+        accumulate brightness
+        display LEDs
+        increment frame
+        WAIT small delay
+
+    --------------------------------------------------
+
+    ELSE IF mode == text:
+        clear LEDs
+        render scrolling text across strips
+        move text position left
+        reset when off screen
+        display LEDs
+        WAIT small delay
+
+END LOOP
 ```
 
 ---
@@ -487,7 +605,7 @@ Examples:
 | `[Score display]` | `[Purpose]` |
 | `[Control button / slider / label]` | `[Purpose]` |
 
-## 11.4 UI Mockup
+## 11.4 UI Mockup NA
 Insert a sketch or screenshot of the app interface.
 
 **Insert image below:**  
