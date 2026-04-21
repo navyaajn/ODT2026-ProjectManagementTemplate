@@ -636,7 +636,7 @@ Insert a sketch or screenshot of the app interface.
 | 12V Power Adapter | 1 | Yes | No | NA | AC-DC adapter | Main power supply |
 | Resistors | 2 | Yes` | No | 0 | For voltage divider | To step down echo pin voltage safely |
 | Foam Board | 1meter in lengh and 10mm x 15 | No | YES | 0 | Lightweight board | Structure support for LED wall |
-| Black Paper | ebiugh to cover the board | No | YES | 250-300 | Matte sheet |Improves visual depth and contrast |
+| Black Paper | enough to cover the board | No | YES | 250-300 | Matte sheet |Improves visual depth and contrast |
 
 ## 12.2 Material Justification
 Explain why you selected your main materials and components.
